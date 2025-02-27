@@ -29,6 +29,32 @@ socket.onmessage = (event) => {
     chatDiv.appendChild(messageElement);
 };
 
+
+socket.onmessage = (event) => {
+    const messageElement = document.createElement("p");
+    messageElement.textContent = event.data;
+    chatDiv.appendChild(messageElement);
+
+    // 🔔 Show in-app notification instead of browser notification
+    showNotification("New Message", event.data);
+};
+
+// In-App Notification Function
+function showNotification(title, message) {
+    const notificationDiv = document.createElement("div");
+    notificationDiv.style.position = "fixed";
+    notificationDiv.style.bottom = "20px";
+    notificationDiv.style.right = "20px";
+    notificationDiv.style.background = "blue";
+    notificationDiv.style.color = "white";
+    notificationDiv.style.padding = "10px";
+    notificationDiv.style.borderRadius = "5px";
+    notificationDiv.innerHTML = `<strong>${title}</strong><br>${message}`;
+
+    document.body.appendChild(notificationDiv);
+    setTimeout(() => notificationDiv.remove(), 5000);
+}
+
 // Push Notification Subscription
 subscribeButton.addEventListener("click", () => {
     if ("serviceWorker" in navigator && "PushManager" in window) {
