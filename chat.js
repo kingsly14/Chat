@@ -12,6 +12,13 @@ sendButton.addEventListener("click", () => {
     if (message.trim()) {
         socket.send(message);
         messageInput.value = "";
+
+        // Send push notification request
+        fetch("/push/send", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message }),
+        });
     }
 });
 
@@ -30,7 +37,7 @@ subscribeButton.addEventListener("click", () => {
                 userVisibleOnly: true,
                 applicationServerKey: "YOUR_PUBLIC_VAPID_KEY"
             }).then(sub => {
-                fetch("/subscribe", {
+                fetch("/push/subscribe", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(sub),
